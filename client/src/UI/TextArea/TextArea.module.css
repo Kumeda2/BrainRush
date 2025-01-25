@@ -1,0 +1,12 @@
+.textArea {
+    padding: 15px 75px;
+    border-radius: 6px;
+    outline: none;
+    font-size: 16px;
+    cursor: pointer;
+    max-width: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    font-family: Arial, sans-serif;
+    align-content: center;
+}

@@ -1,0 +1,18 @@
+.uploaderContainer {
+    display: flex;
+  }
+  
+.fileUploader {
+    background-color: #9510ac;
+    color: white;
+    padding: 15px 34px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 2px solid #9510ac;
+}
+  
+.hiddenInput {
+    display: none;
+}

@@ -1,39 +1,37 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import { gamesReducers } from "./slices/gamesSlice";
+import { userReducers } from "./slices/userSlice";
+import { persistStore, persistReducer } from "redux-persist";
+import storageSession from "redux-persist/lib/storage/session";
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import fetchUserMiddleware from "./middleware/fetchUserMiddleware";
 
-const initialDisplayedGame = {
-  game: {
-    title: "",
-    preview: "",
-    questions: [
-      {
-        question: "",
-        answers: [
-          { text: "", isCorrect: false },
-          { text: "", isCorrect: false },
-          { text: "", isCorrect: true },
-          { text: "", isCorrect: false },
-        ],
-      },
-    ],
-  },
+const persistConfig = {
+  key: "user",
+  storage: storageSession,
 };
 
-const displayedGameSlice = createSlice({
-  name: "displayedGame",
-  initialState: initialDisplayedGame,
-  reducers: {
-    displayGame: (state, action) => {
-      state.game = action.payload;
-    },
-  },
-});
-
-export const { displayGame } = displayedGameSlice.actions;
+const persistedUserReducer = persistReducer(persistConfig, userReducers);
 
 const displayedGameStore = configureStore({
   reducer: {
-    currentGame: displayedGameSlice.reducer,
+    games: gamesReducers,
+    user: persistedUserReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(fetchUserMiddleware),
 });
 
-export default displayedGameStore;
+export const store = displayedGameStore;
+export const persistor = persistStore(store);

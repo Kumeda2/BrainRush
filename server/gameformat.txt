@@ -1,0 +1,52 @@
+{
+      game_name: "Mega game",
+      preview: "src/assets/images/game.webp",
+      marks: 2,
+      rating: 4.1,
+      questions: [
+        {
+          question: "How many chromosomes does human have?",
+          maxPoints: 123
+          time: "00:00:30"
+          answers: [
+            { text: "45", isCorrect: false },
+            { text: "46", isCorrect: true },
+            { text: "47", isCorrect: true },
+            { text: "48", isCorrect: false },
+          ],
+        },
+        {
+          question: "What is the capital of France?",
+          maxPoints: 123
+          time: "00:00:30"
+          answers: [
+            { text: "Berlin", isCorrect: false },
+            { text: "Madrid", isCorrect: false },
+            { text: "Paris", isCorrect: true },
+            { text: "Rome", isCorrect: false },
+          ],
+        },
+        {
+          question: "What is the chemical symbol for water?",
+          maxPoints: 123
+          time: "00:00:30"
+          answers: [
+            { text: "H2O", isCorrect: true },
+            { text: "O2", isCorrect: false },
+            { text: "CO2", isCorrect: false },
+            { text: "HO", isCorrect: false },
+          ],
+        },
+        {
+          question: "What planet is known as the Red Planet?",
+          maxPoints: 123
+          time: "00:00:30"
+          answers: [
+            { text: "Earth", isCorrect: false },
+            { text: "Mars", isCorrect: true },
+            { text: "Jupiter", isCorrect: false },
+            { text: "Saturn", isCorrect: false },
+          ],
+        },
+      ],
+}

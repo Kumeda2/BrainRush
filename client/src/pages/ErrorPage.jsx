@@ -5,7 +5,9 @@ export default function ErrorPage() {
     <div className="error-page">
       <h1>404</h1>
       <h2>Page not found</h2>
-      <Link to="/">Go back to the main page</Link>
+      <Link to="/">
+        Go back to the <span>main</span> page
+      </Link>
     </div>
   );
 }

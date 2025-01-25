@@ -3,7 +3,7 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import Input from "../UI/Input/Input";
 import { useState } from "react";
 
-export default function Password({ passwordStrength }) {
+export default function Password({ passwordStrength, passwordValidation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [validationDetails, setValidationDetails] = useState({
@@ -46,6 +46,7 @@ export default function Password({ passwordStrength }) {
       specialChar,
     });
     setIsValidPassword(isValid);
+    passwordValidation(isValid, password);
     return isValid;
   };
 
@@ -58,7 +59,6 @@ export default function Password({ passwordStrength }) {
     );
     passwordStrength(strength);
   };
-
 
   return (
     <>

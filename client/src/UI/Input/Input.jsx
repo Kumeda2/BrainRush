@@ -1,22 +1,33 @@
 import cl from "./Input.module.css";
 
 const Input = ({
+  id,
   type = "text",
   placeholder,
   width,
-  changeHandler,
-  pushEnter,
+  changeHandler = () => {},
+  pushEnter = () => {},
   color = "#757575",
-  focus = () => {}
+  focus = () => {},
+  border = "none",
+  value,
 }) => {
   return (
     <input
-      style={{ width, color }}
+      value={value}
+      id={id}
+      style={{ width, color, border }}
       className={cl.input}
       type={type}
       placeholder={placeholder}
       onFocus={(e) => focus(e.target.value)}
-      onChange={(e) => changeHandler(e.target.value)}
+      onChange={(e) => {
+        if (type === "checkbox") {
+          changeHandler(e.target.checked);
+        } else {
+          changeHandler(e.target.value);
+        }
+      }}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           pushEnter(e.target.value);

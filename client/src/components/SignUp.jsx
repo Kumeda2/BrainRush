@@ -1,38 +1,66 @@
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Button from "../UI/Button/Button";
 import Input from "../UI/Input/Input";
 import { paths } from "../router/paths";
 import { toast, Toaster } from "react-hot-toast";
 import Password from "./Password";
 import StrenghtIndicator from "../modules/StrenghtIndicator";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { checkAuth, registration } from "../store/actions/middlewareActions";
 
-export default function SignUp({setStatus}) {
+export default function SignUp({ setStatus }) {
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
+  const [password, setPassword] = useState("");
+  const [isValidPassword, setIsValidPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [passwordStrength, setPasswordStrength] = useState(
     Array(4).fill(false)
   );
+  const { isAuth, user } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const updateEmail = (email) => {
-    setEmail(email);
+  useEffect(() => {
+    toast.dismiss();
+    if (localStorage.getItem("token")) {
+      dispatch(checkAuth());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate(paths.MAIN);
+    }
+  }, [isAuth]);
+
+  const updateEmail = () => {
     setIsValidEmail(true);
   };
 
-  const validateForm = () => {
+  const validateForm = async () => {
     const isValidEmail = validateEmail(email);
     setIsValidEmail(isValidEmail);
 
     const isValidUsername = username.length > 0;
-    const isUserExists = username === "admin";
-    //TODO: check if user exists in the database
 
     if (!isValidUsername) {
       toast.error("User name is required");
-    } else if (isUserExists) {
-      toast.error("User already exists");
+    } else if (!isValidPassword) {
+      toast.error("Use correct password");
+    } else if (!isValidEmail) {
+      toast.error("Use correct email");
     } else {
-      navigate(paths.MAIN);
+      const loadingToastId = toast.loading("Processing registration...");
+      try {
+        await dispatch(registration(email, password, username));
+        navigate(paths.MAIN);
+      } catch (e) {
+        toast.error(e.response?.data?.message || "Registration failed!");
+      } finally {
+        toast.dismiss(loadingToastId);
+      }
     }
   };
 
@@ -40,6 +68,14 @@ export default function SignUp({setStatus}) {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     return isValid;
+  };
+
+  const checkPasswordValidation = (isValid, password) => {
+    setIsValidPassword(isValid);
+
+    if (isValid) {
+      setPassword(password);
+    }
   };
 
   return (
@@ -64,12 +100,20 @@ export default function SignUp({setStatus}) {
             placeholder="Email"
             width={"100%"}
             focus={updateEmail}
+            changeHandler={setEmail}
             color={isValidEmail ? "#757575" : "rgba(248, 50, 43, 0.5)"}
           />
         </div>
-        <Password passwordStrength={setPasswordStrength}/>
-        <StrenghtIndicator strengthLevel={passwordStrength}/>
-        <Button variant={"classic"} size={"100%"} clickHandler={validateForm}>
+        <Password
+          passwordStrength={setPasswordStrength}
+          passwordValidation={checkPasswordValidation}
+        />
+        <StrenghtIndicator strengthLevel={passwordStrength} />
+        <Button
+          variant={"classic"}
+          size={{ width: "100%" }}
+          clickHandler={validateForm}
+        >
           Sign Up
         </Button>
       </form>
@@ -77,7 +121,7 @@ export default function SignUp({setStatus}) {
         <p>Already have an account?</p>
         <Button
           variant={"outline"}
-          size={"40%"}
+          size={{ width: "40%" }}
           clickHandler={() => setStatus(true)}
         >
           Sign In

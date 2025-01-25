@@ -4,6 +4,17 @@ import ErrorPage from "../pages/ErrorPage";
 import { paths } from "./paths";
 import Auth from "../pages/Auth";
 import Main from "../pages/Main";
+import UserGames from "../pages/UserGames";
+import { useSelector } from "react-redux";
+import CreatingPage from "../pages/CreatingPage";
+
+const PrivateRoute = ({ element }) => {
+  const { isAuth } = useSelector((state) => state.user);
+
+  if (isAuth) return element;
+
+  return <ErrorPage />;
+};
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +28,16 @@ export const router = createBrowserRouter([
   },
   {
     path: paths.MAIN,
-    element: <Main />,
+    element: <PrivateRoute element={<Main />} />,
+  },
+  {
+    path: paths.MY_GAMES,
+    element: <PrivateRoute element={<UserGames />} />,
+  },
+  {
+    path: paths.GAMES_CREATION,
+    element: <PrivateRoute element={<CreatingPage />} />,
   },
 ]);
+
+//TODO: add loaders
