@@ -1,14 +1,17 @@
 .classic {
-    background-color: #9510ac;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #684eff;
     color: white;
     padding: 15px 34px;
-    text-align: center;
     text-decoration: none;
-    font-size: 16px;
     cursor: pointer;
     transition: 0.2s;
     border-radius: 6px;
-    border: 2px solid #9510ac;
+    border: 2px solid #2600ff;
+    font-size: 20px;
+    font-size: 20px;
 }
 
 .classic:hover {
@@ -17,16 +20,19 @@
 }
 
 .classic2 {
-    background: #da0063;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff3e3e;
     color: white;
     padding: 15px 34px;
     text-align: center;
     text-decoration: none;
-    font-size: 16px;
     cursor: pointer;
     transition: 0.2s;
     border-radius: 6px;
-    border: 2px solid #da0063;
+    border: 2px solid #fd0000;
+    font-size: 20px;
 }
 
 .classic2:hover {
@@ -35,16 +41,19 @@
 }
 
 .outline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent;
     border: 2px solid #fff;
     color: #fff;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
-    font-size: 16px;
     cursor: pointer;
     transition: 0.2s;
     border-radius: 6px;
+    font-size: 20px;
 }
 
 .outline:hover {
@@ -53,6 +62,5 @@
 }
 
 .animated:hover {
-    letter-spacing: 0.4px;
-    
+    letter-spacing: 0.4px; 
 }

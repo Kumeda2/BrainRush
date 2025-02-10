@@ -1,6 +1,11 @@
+import { memo } from "react";
 import cl from "./FileUploader.module.css";
 
-export default function FileUploader({ handleFileUpload, placeholder, width }) {
+const MemoizedFileUploader = memo(function FileUploader({
+  handleFileUpload,
+  placeholder,
+  width,
+}) {
   return (
     <div className={cl.uploaderContainer}>
       <label
@@ -19,4 +24,6 @@ export default function FileUploader({ handleFileUpload, placeholder, width }) {
       />
     </div>
   );
-}
+});
+
+export default MemoizedFileUploader;

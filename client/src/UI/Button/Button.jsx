@@ -1,6 +1,7 @@
+import { memo } from "react";
 import cl from "./Button.module.css";
 
-export default function Button({
+const MemoizedButton = memo(function Button({
   children,
   clickHandler = () => {},
   variant,
@@ -18,4 +19,6 @@ export default function Button({
       {children}
     </button>
   );
-}
+});
+
+export default MemoizedButton;

@@ -1,16 +1,15 @@
 import $api from "../http";
 
 export default class UserService {
-  static async createGame(formData, host) {
+  static async createGame(game, host) {
     try {
-      const response = await $api.post(`/games/${host}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await $api.post(`/games/${host}`, {
+        game,
       });
 
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -21,6 +20,7 @@ export default class UserService {
 
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -33,6 +33,7 @@ export default class UserService {
 
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -43,6 +44,7 @@ export default class UserService {
 
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -55,6 +57,7 @@ export default class UserService {
 
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -67,6 +70,7 @@ export default class UserService {
 
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -77,26 +81,33 @@ export default class UserService {
 
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
 
-  static async getUserGames(username) {
+  static async getUserGames(username, offset = 0, limit = 12) {
     try {
-      const response = await $api.get(`/users/${username}/games`);
+      const response = await $api.get(`/users/${username}/games`, {
+        params: { offset, limit },
+      });
 
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
 
-  static async getPopular() {
+  static async getPopular(username, offset = 0, limit = 6) {
     try {
-      const response = await $api.get(`/popular`);
-
+      const response = await $api.get(`/popular`, {
+        params: { username, offset, limit },
+      });
+      
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

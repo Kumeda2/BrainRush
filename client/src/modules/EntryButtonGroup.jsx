@@ -6,23 +6,23 @@ export function EntryButtonGroup({ join }) {
   return (
     <>
       <div className="button-group">
-        <Button
-          variant={"classic"}
-          clickHandler={join}
-          size={{ width: "170px" }}
-          animated={true}
-        >
-          Join game
-        </Button>
         <Link to={paths.AUTH}>
           <Button
             variant={"classic2"}
-            size={{ width: "170px" }}
+            size={{ width: "210px", height: "58px" }}
             animated={true}
           >
-            Create game
+            <p>Create game</p>
           </Button>
         </Link>
+        <Button
+          variant={"classic"}
+          clickHandler={join}
+          size={{ width: "210px", height: "58px" }}
+          animated={true}
+        >
+          <p>Join game</p>
+        </Button>
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 import AuthService from "../../services/AuthService";
-import { loginUser, logoutUser, updateUser } from "../slices/userSlice";
+import { loginUser, logoutUser } from "../slices/userSlice";
 
-//асинхронний екшн який повертає не об'єкт а функцію, яку перехоплює мідлвейр і надає доступ до діспатчу
 const fetchUserMiddleware = (storeAPI) => (next) => async (action) => {
   switch (action.type) {
     case "user/registration": {

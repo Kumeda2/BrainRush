@@ -1,7 +1,7 @@
+import { memo } from "react";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
-import { useSelector } from "react-redux";
 
-export default function Rating({ rating, ratingArray, rate }) {
+const MemoizedRating = memo(function Rating({ rating, ratingArray, rate }) {
   return (
     <div className="rating-container">
       <h3>Rate this game</h3>
@@ -36,4 +36,6 @@ export default function Rating({ rating, ratingArray, rate }) {
       </div>
     </div>
   );
-}
+});
+
+export default MemoizedRating;

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function Card({ title, img, click }) {
+const MemoCard = memo(function ({ title, img, click }) {
   const [showTitle, setShowTitle] = useState(false);
 
   return (
@@ -34,4 +34,6 @@ export default function Card({ title, img, click }) {
       <img src={img} style={{ borderRadius: "10px" }} />
     </motion.div>
   );
-}
+});
+
+export default MemoCard;

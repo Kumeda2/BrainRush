@@ -1,63 +1,37 @@
 import Games from "../components/Games";
 import Sidebar from "../modules/Sidebar";
 import GameInfo from "../components/GameInfo";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { getPopularGames } from "../store/actions/asyncGamesActions";
-import { Link, useNavigate } from "react-router";
-import User from "../modules/User";
-import Menu from "../modules/Menu";
-import Button from "../UI/Button/Button";
-import { logout } from "../store/actions/middlewareActions";
-import { paths } from "../router/paths";
+import Header from "../modules/Header";
+import useResizeDetector from "../hooks/useResizeDetector";
+import { resetPopularGames } from "../store/slices/gamesSlice";
 
 export default function Main() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const logoutHandler = () => {
-    dispatch(logout());
-    navigate(paths.ENTRY);
-  };
+  const { popularGames } = useSelector((state) => state.games);
+  const { user } = useSelector((state) => state.user);
+  const { isMobile, width } = useResizeDetector();
 
   useEffect(() => {
-    dispatch(getPopularGames());
+    dispatch(resetPopularGames());
   }, []);
+
+  useEffect(() => {
+    if (popularGames.length === 0) dispatch(getPopularGames(user.username));
+  }, [popularGames]);
 
   return (
     <div className="main">
-      <Sidebar>
-        <div className="container">
-          <User />
-          <Menu>
-            <Link to={paths.MY_GAMES}>
-              <Button variant={"classic2"} size={{ width: "100%" }}>
-                My games
-              </Button>
-            </Link>
-            <Link to={paths.GAMES_CREATION}>
-              <Button variant={"classic2"} size={{ width: "100%" }}>
-                Create game
-              </Button>
-            </Link>
-            <Button variant={"classic2"} size={{ width: "100%" }}>
-              Something
-            </Button>
-          </Menu>
-        </div>
-
-        <div className="logout-btn">
-          <Button
-            variant={"classic2"}
-            size={{ width: "70%" }}
-            clickHandler={logoutHandler}
-          >
-            Log out
-          </Button>
-        </div>
-      </Sidebar>
+      <Header
+        links={["My Games", "Create game", "Log out"]}
+        isLogOut={true}
+        isMobile={isMobile}
+      />
+      <Sidebar />
       <div className="wrapper">
-        <GameInfo />
+        <GameInfo isMobile={isMobile} width={width} />
         <Games />
       </div>
     </div>

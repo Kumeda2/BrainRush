@@ -48,15 +48,15 @@ class UserController {
     }
   }
 
-  async activate(req, res, next) {
-    try {
-      const { link } = req.params;
-      await userService.activate(link );
-      return res.redirect(process.env.CLIENT_URL);
-    } catch (e) {
-      next(e);
-    }
-  }
+  // async activate(req, res, next) {
+  //   try {
+  //     const { link } = req.params;
+  //     await userService.activate(link );
+  //     return res.redirect(process.env.CLIENT_URL);
+  //   } catch (e) {
+  //     next(e);
+  //   }
+  // }
 
   async refresh(req, res, next) {
     try {

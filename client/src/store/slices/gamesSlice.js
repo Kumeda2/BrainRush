@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Rating from "../../modules/Rating";
 
-const initialDisplayedGame = {
+const initialState = {
   game: {
     game_name: null,
     id: null,
@@ -22,26 +21,45 @@ const initialDisplayedGame = {
       },
     ],
   },
-  popularGames: null,
-  userGames: null,
+  popularGames: [],
+  userGames: [],
+  hasMorePublicGames: true,
+  hasMoreUserGames: true,
 };
 
 const gamesSlice = createSlice({
   name: "games",
-  initialState: initialDisplayedGame,
+  initialState: initialState,
   reducers: {
     displayGame: (state, action) => {
       state.game = action.payload;
     },
     loadPopularGames: (state, action) => {
-      state.popularGames = action.payload;
+      state.popularGames.push(...action.payload.games);
+      if (
+        action.payload.remainingGames < 6
+      ) {
+        state.hasMorePublicGames = false;
+      }
+    },
+    resetPopularGames: (state, action) => {
+      state.popularGames = [];
     },
     loadUserGames: (state, action) => {
-      state.userGames = action.payload;
+      state.userGames.push(...action.payload.games);
+      if (
+        action.payload.remainingGames < 12
+      ) {
+        state.hasMoreUserGames = false;
+      }
     },
+    resetUserGames: (state) => {
+      state.userGames = [];
+      state.hasMoreUserGames = true;
+    }
   },
 });
 
-export const { displayGame, loadPopularGames, loadUserGames } =
+export const { displayGame, loadPopularGames, resetPopularGames, loadUserGames, resetUserGames } =
   gamesSlice.actions;
 export const gamesReducers = gamesSlice.reducer;

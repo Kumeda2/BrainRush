@@ -8,16 +8,12 @@ router.post('/games/:username', authMiddleware, userActionsController.create);
 router.delete('/games/:gameId', authMiddleware, userActionsController.delete);
 router.put('/games/:gameId', authMiddleware, userActionsController.changeGame);
 router.put('/games/:gameId/:host/:mark', authMiddleware, userActionsController.changeMark);
-router.put('/questions/:questionId', authMiddleware, userActionsController.changeQuestion);
-router.put('/answers/:answerId', authMiddleware, userActionsController.changeAnswer);
 router.get('/games/:gameId', authMiddleware, userActionsController.getGame);
 router.get('/users/:username/games', authMiddleware, userActionsController.getUserGames);
 router.get('/popular/', authMiddleware, userActionsController.getPopular);
-
 router.post("/registration", userAuthController.registration);
 router.post("/login", userAuthController.login);
 router.post("/logout", userAuthController.logout);
-router.get("/activate/:link", userAuthController.activate);
 router.get("/refresh", userAuthController.refresh);
 
 module.exports = router;

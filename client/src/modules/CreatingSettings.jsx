@@ -5,19 +5,12 @@ export default function CreatingSettings({ changeHandler, question }) {
     <div className="settings">
       <label htmlFor="timer">Timer</label>
       <Input
+        type={"number"}
         value={question.time || ""}
         id={"timer"}
         width={"50%"}
         border={"solid rgb(231, 231, 231) 1px"}
-        placeholder={"MM:SS"}
-        pushEnter={(value) => {
-          const isValid = /^([0-5]?[0-9]):([0-5]?[0-9])$/.test(value);
-          if (isValid) {
-            console.log("Valid timer:", value);
-          } else {
-            console.error("Invalid timer format. Use MM:SS.");
-          }
-        }} /////////this is the part that needs to be changed
+        placeholder={"Set question time in seconds"}
         changeHandler={(value) => changeHandler(value, question.id, "time")}
       />
       <label htmlFor="points">Points</label>

@@ -1,3 +1,11 @@
-export default function UserGames() {}
+import UserGamesSection from "../components/UserGamesSection";
+import Header from "../modules/Header";
 
-//useParams - react router
+export default function UserGames() {
+  return (
+    <>
+      <Header links={["Main", "Create game"]} isMobile={false} />
+      <UserGamesSection />
+    </>
+  );
+}

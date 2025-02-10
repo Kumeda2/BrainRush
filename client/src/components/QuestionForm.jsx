@@ -1,21 +1,22 @@
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import Input from "../UI/Input/Input";
 import TextArea from "../UI/TextArea/TextArea";
 import Button from "../UI/Button/Button";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import CreatingSettings from "../modules/CreatingSettings";
 import Answer from "../modules/Answer";
 
-export default function QuestionForm({ question, questionsModifier }) {
-  const removeQuestion = (id) => {
-    console.log("Removing question at index:", id);
+const MemoizedQuestionForm = memo(function QuestionForm({
+  question,
+  questionsModifier,
+}) {
+  const removeQuestion = useCallback((id) => {
     questionsModifier((prevQuestions) => {
       const newQuestions = [...prevQuestions];
       const index = newQuestions.findIndex((question) => question.id === id);
       newQuestions.splice(index, 1);
       return newQuestions;
     });
-  };
+  }, []);
 
   const changeQuestionHandler = useCallback((value, questionId, param) => {
     questionsModifier((prevQuestions) => {
@@ -39,11 +40,11 @@ export default function QuestionForm({ question, questionsModifier }) {
       return prevQuestions.map((question) => {
         if (question.id === questionId) {
           const newAnswers = question.answers.map((answer) => {
-            if (answer.answer_id === answerId) {
+            if (answer.id === answerId) {
               if (param === "text") {
-                return { ...answer, text: value };
+                return { ...answer, answer: value };
               } else {
-                return { ...answer, isCorrect: value };
+                return { ...answer, is_correct: value };
               }
             }
             return answer;
@@ -56,11 +57,7 @@ export default function QuestionForm({ question, questionsModifier }) {
   }, []);
 
   return (
-    <form
-      className="question"
-      key={question.id}
-      onSubmit={(e) => e.preventDefault()}
-    >
+    <div className="question-shared" onSubmit={(e) => e.preventDefault()}>
       <TextArea
         value={question.question || ""}
         placeholder={"Type your question"}
@@ -72,7 +69,7 @@ export default function QuestionForm({ question, questionsModifier }) {
       />
       {question.answers.map((answer) => (
         <Answer
-          key={answer.answer_id}
+          key={answer.id}
           answer={answer}
           question={question}
           changeHandler={changeAnswer}
@@ -93,6 +90,8 @@ export default function QuestionForm({ question, questionsModifier }) {
       >
         Remove question
       </Button>
-    </form>
+    </div>
   );
-}
+});
+
+export default MemoizedQuestionForm;

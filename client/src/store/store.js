@@ -12,18 +12,47 @@ import {
   REGISTER,
 } from "redux-persist";
 import fetchUserMiddleware from "./middleware/fetchUserMiddleware";
+import { playersReducer } from "./slices/playersSlice";
+import { socketReducers } from "./slices/socketSlice";
+import createTransform from "redux-persist/es/createTransform";
 
-const persistConfig = {
+const gameTransform = createTransform(
+  (inboundState) => inboundState.game, 
+  (outboundState) => ({
+    ...initialState,
+    game: outboundState,
+  }),
+  { whitelist: ["game"] }
+);
+
+const persistGamesConfig = {
+  key: "games",
+  storage: storageSession,
+  transforms: [gameTransform],
+};
+
+const persistUsersConfig = {
   key: "user",
   storage: storageSession,
 };
 
-const persistedUserReducer = persistReducer(persistConfig, userReducers);
 
-const displayedGameStore = configureStore({
+
+const persistPlayersConfig = {
+  key: "players",
+  storage: storageSession,
+}
+
+const persistedUserReducer = persistReducer(persistUsersConfig, userReducers);
+const persistedGamesReducer = persistReducer(persistGamesConfig, gamesReducers);
+const persistedPlayersReducer = persistReducer(persistPlayersConfig, playersReducer);
+
+export const store = configureStore({
   reducer: {
-    games: gamesReducers,
+    games: persistedGamesReducer,
     user: persistedUserReducer,
+    players: persistedPlayersReducer,
+    socket: socketReducers,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -33,5 +62,4 @@ const displayedGameStore = configureStore({
     }).concat(fetchUserMiddleware),
 });
 
-export const store = displayedGameStore;
 export const persistor = persistStore(store);

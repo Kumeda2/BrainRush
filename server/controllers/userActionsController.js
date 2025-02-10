@@ -3,9 +3,10 @@ const gameService = require("../services/gameService");
 class UserActionsController {
   async create(req, res, next) {
     try {
-      const { game_name, preview, rating, isPrivate, questions } = req.body;
-      const { host } = req.params;
-      const gameData = await gameService.createGame(game_name, preview, rating, isPrivate, questions, host);
+      const { game } = req.body;
+      const { username } = req.params;
+
+      const gameData = await gameService.createGame(game, username);
 
       return res.json(gameData);
     } catch (e) {
@@ -29,30 +30,6 @@ class UserActionsController {
       const { gameId } = req.params;
       const { updatedGame } = req.body;
       const gameData = await gameService.updateGame(gameId, updatedGame);
-
-      return res.json(gameData)
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  async changeQuestion(req, res, next) {
-    try {
-      const {questionId} = req.params;
-      const {updatedQuestion} = req.body;
-      const gameData = await gameService.updateQuestion(questionId, updatedQuestion);
-
-      return res.json(gameData)
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  async changeAnswer(req, res, next) {
-    try {
-      const {answerId} = req.params;
-      const {updatedAnswer} = req.body;
-      const gameData = await gameService.updateAnswer(answerId, updatedAnswer);
 
       return res.json(gameData)
     } catch (e) {
@@ -85,7 +62,8 @@ class UserActionsController {
   async getUserGames(req, res, next) {
     try {
       const { username } = req.params;
-      const gameData = await gameService.getAllUserGames(username);
+      const { offset, limit } = req.query;
+      const gameData = await gameService.getAllUserGames(username, offset, limit);
 
       return res.json(gameData)
     } catch (e) {
@@ -95,7 +73,8 @@ class UserActionsController {
 
   async getPopular(req, res, next) {
     try {
-      const gameData = await gameService.getPopularGames();
+      const { username, offset, limit } = req.query; 
+      const gameData = await gameService.getPopularGames(username, Number(offset), Number(limit));
 
       return res.json(gameData)
     } catch (e) {

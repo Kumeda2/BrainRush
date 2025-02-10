@@ -2,7 +2,7 @@ import { IoEyeOffOutline } from "react-icons/io5";
 import { IoEyeOutline } from "react-icons/io5";
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../store/actions/middlewareActions";
 import { toast, Toaster } from "react-hot-toast";
@@ -22,7 +22,7 @@ export default function SignIn({ setStatus }) {
     toast.dismiss();
   }, []);
 
-  const signIn = async () => {
+  const signIn = useCallback(async () => {
     const loadingToastId = toast.loading("Processing login...");
     try {
       await dispatch(login(email, password));
@@ -32,7 +32,7 @@ export default function SignIn({ setStatus }) {
     } finally {
       toast.dismiss(loadingToastId);
     }
-  };
+  }, [email, password]);
 
   return (
     <>
@@ -43,12 +43,20 @@ export default function SignIn({ setStatus }) {
         noValidate
         onSubmit={(e) => e.preventDefault()}
       >
-        <h1>Sign in</h1>
+        <h1>
+          Sign <span>in</span>
+        </h1>
         <div className="input-group">
-          <Input placeholder="Email" width={"100%"} changeHandler={setEmail} />
+          <Input
+            value={email}
+            placeholder="Email"
+            width={"100%"}
+            changeHandler={setEmail}
+          />
         </div>
         <div className="input-group">
           <Input
+            value={password}
             type={!showPassword ? "password" : "text"}
             placeholder="Password"
             style={{ position: "relative" }}

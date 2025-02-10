@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./router/auth_router.js");
 // const userRouter = require("./router/user_router.js");
 const errorMiddleware = require("./middlewares/error_middleware");
+const { Server } = require("socket.io");
+const socketConnection = require("./services/socketService.js");
 
 const app = express();
 
@@ -24,9 +26,11 @@ app.use(errorMiddleware);
 const start = async () => {
   try {
     await mongoose.connect(process.env.DB_URL);
-    app.listen(process.env.PORT, () =>
+    const expressServer = app.listen(process.env.PORT, () =>
       console.log(`Server started on PORT: ${process.env.PORT}`)
     );
+
+    socketConnection(expressServer);
   } catch (e) {
     console.log(e);
   }

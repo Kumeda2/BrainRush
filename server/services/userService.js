@@ -1,8 +1,8 @@
 const UserModel = require("../models/user_model");
 const ApiError = require("../exceptions/apiError");
 const bcrypt = require("bcrypt");
-const uuid = require("uuid");
-const mailService = require("./mailService");
+// const uuid = require("uuid");
+// const mailService = require("./mailService");
 const tokenService = require("./tokenService");
 const UserDto = require("../dtos/userDto");
 
@@ -21,19 +21,19 @@ class UserService {
     }
 
     const hashPassword = await bcrypt.hash(password, 5);
-    const activationLink = uuid.v4();
+    // const activationLink = uuid.v4();
 
     const user = await UserModel.create({
       email,
       password: hashPassword,
       username,
-      activationLink,
+      // activationLink,
     });
 
-    await mailService.sendActivationMail(
-      email,
-      `${process.env.API_URL}/api/activate/${activationLink}`
-    );
+    // await mailService.sendActivationMail(
+    //   email,
+    //   `${process.env.API_URL}/api/activate/${activationLink}`
+    // );
 
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
@@ -45,16 +45,16 @@ class UserService {
     };
   }
 
-  async activate(activationLink) {
-    const user = await UserModel.findOne({ activationLink });
+  // async activate(activationLink) {
+  //   const user = await UserModel.findOne({ activationLink });
 
-    if (!user) {
-      throw ApiError.BadRequest("Incorrect activation link");
-    }
+  //   if (!user) {
+  //     throw ApiError.BadRequest("Incorrect activation link");
+  //   }
 
-    user.isActivated = true;
-    await user.save();
-  }
+  //   user.isActivated = true;
+  //   await user.save();
+  // }
 
   async login(email, password) {
     const user = await UserModel.findOne({ email });

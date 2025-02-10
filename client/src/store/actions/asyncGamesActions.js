@@ -1,6 +1,3 @@
-//In this file implemented async actions handling with redux-thunk 
-// for comparing custom middleware with redux-thunk
-
 import UserService from "../../services/UserService";
 import { displayGame, loadPopularGames, loadUserGames } from "../slices/gamesSlice";
 
@@ -14,9 +11,9 @@ export const getGame = (gameId) => async (dispatch) => {
     }
 }
 
-export const getPopularGames = () => async (dispatch) => {
+export const getPopularGames = (username, offset = 0, limit = 6) => async (dispatch) => {
     try {
-        const data = await UserService.getPopular();
+        const data = await UserService.getPopular(username, offset, limit);
         dispatch(loadPopularGames(data));
     } catch (error) {
         console.log(error);
@@ -24,9 +21,9 @@ export const getPopularGames = () => async (dispatch) => {
     }
 }
 
-export const getUserGames = (username) => async (dispatch) => {
+export const getUserGames = (username, offset = 0, limit = 12) => async (dispatch) => {
     try {
-        const data = await UserService.getUserGames(username);
+        const data = await UserService.getUserGames(username, offset, limit);
         dispatch(loadUserGames(data))
     } catch (error) {
         console.log(error);

@@ -1,6 +1,7 @@
+import { memo } from "react";
 import cl from "./Input.module.css";
 
-const Input = ({
+const MemoizedInput = memo(function Input({
   id,
   type = "text",
   placeholder,
@@ -11,9 +12,10 @@ const Input = ({
   focus = () => {},
   border = "none",
   value,
-}) => {
+}) {
   return (
     <input
+      checked={value}
       value={value}
       id={id}
       style={{ width, color, border }}
@@ -35,6 +37,6 @@ const Input = ({
       }}
     />
   );
-};
+});
 
-export default Input;
+export default MemoizedInput;

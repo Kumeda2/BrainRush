@@ -1,7 +1,7 @@
 import { errors, MIN_LENGTH } from "../utils/consts";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import Input from "../UI/Input/Input";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export default function Password({ passwordStrength, passwordValidation }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,21 +14,21 @@ export default function Password({ passwordStrength, passwordValidation }) {
     properLength: false,
   });
 
-  const getErrorMessage = () => {
+  const getErrorMessage = useCallback(() => {
     if (!validationDetails.upperCase) return errors.UPPERCASE_ERROR;
     if (!validationDetails.lowerCase) return errors.LOWERCASE_ERROR;
     if (!validationDetails.number) return errors.NUMBER_ERROR;
     if (!validationDetails.specialChar) return errors.SPECIAL_CHAR_ERROR;
     if (!validationDetails.properLength) return errors.PROPER_LENGTH_ERROR;
     return null;
-  };
+  }, [validationDetails]);
 
-  const handlePasswordChange = (password) => {
+  const handlePasswordChange = useCallback((password) => {
     validatePassword(password);
     checkPasswordStrength(password);
-  };
+  }, []);
 
-  const validatePassword = (password) => {
+  const validatePassword = useCallback((password) => {
     const upperCase = /[A-Z]/.test(password);
     const lowerCase = /[a-z]/.test(password);
     const number = /\d/.test(password);
@@ -48,9 +48,9 @@ export default function Password({ passwordStrength, passwordValidation }) {
     setIsValidPassword(isValid);
     passwordValidation(isValid, password);
     return isValid;
-  };
+  }, []);
 
-  const checkPasswordStrength = (password) => {
+  const checkPasswordStrength = useCallback((password) => {
     const levels = 4;
     const thresholds = [8, 12, 16, 20];
     const strength = Array.from(
@@ -58,7 +58,7 @@ export default function Password({ passwordStrength, passwordValidation }) {
       (_, i) => password.length >= thresholds[i]
     );
     passwordStrength(strength);
-  };
+  }, []);
 
   return (
     <>
@@ -77,9 +77,9 @@ export default function Password({ passwordStrength, passwordValidation }) {
           )}
         </span>
       </div>
-      {!isValidPassword && (
-        <p className="password-error">{getErrorMessage()}</p>
-      )}
+      <div className="password-error">
+        {!isValidPassword && <p>{getErrorMessage()}</p>}
+      </div>
     </>
   );
 }

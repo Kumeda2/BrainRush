@@ -1,8 +1,8 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "../UI/Button/Button";
 import Input from "../UI/Input/Input";
 import { paths } from "../router/paths";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Password from "./Password";
 import StrenghtIndicator from "../modules/StrenghtIndicator";
 import { useNavigate } from "react-router";
@@ -18,7 +18,7 @@ export default function SignUp({ setStatus }) {
   const [passwordStrength, setPasswordStrength] = useState(
     Array(4).fill(false)
   );
-  const { isAuth, user } = useSelector((state) => state.user);
+  const { isAuth } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -35,11 +35,9 @@ export default function SignUp({ setStatus }) {
     }
   }, [isAuth]);
 
-  const updateEmail = () => {
-    setIsValidEmail(true);
-  };
+  const updateEmail = () => setIsValidEmail(true);
 
-  const validateForm = async () => {
+  const validateForm = useCallback(async () => {
     const isValidEmail = validateEmail(email);
     setIsValidEmail(isValidEmail);
 
@@ -62,7 +60,7 @@ export default function SignUp({ setStatus }) {
         toast.dismiss(loadingToastId);
       }
     }
-  };
+  }, [email, username, password, isValidPassword]);
 
   const validateEmail = (email) => {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -80,16 +78,18 @@ export default function SignUp({ setStatus }) {
 
   return (
     <>
-      <Toaster />
       <form
         className="login-form"
         method="post"
         noValidate
         onSubmit={(e) => e.preventDefault()}
       >
-        <h1>Sign up</h1>
+        <h1>
+          Sign <span>up</span>
+        </h1>
         <div className="input-group">
           <Input
+            value={username}
             placeholder="Username"
             width={"100%"}
             changeHandler={setUsername}
@@ -97,6 +97,7 @@ export default function SignUp({ setStatus }) {
         </div>
         <div className="input-group">
           <Input
+            value={email}
             placeholder="Email"
             width={"100%"}
             focus={updateEmail}

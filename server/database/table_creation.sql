@@ -9,7 +9,7 @@ CREATE TABLE game (
     game_name VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
     rating FLOAT,
-    preview BYTEA,
+    preview VARCHAR(500),
     private BOOLEAN NOT NULL,
     host_id INT NOT NULL,
     CONSTRAINT fk_host_id FOREIGN KEY (host_id) REFERENCES game_host(id) ON DELETE CASCADE,
@@ -31,7 +31,7 @@ CREATE TABLE question (
     question VARCHAR(500) NOT NULL,
     max_points INT NOT NULL,
     game_id INT NOT NULL,
-    time TIME NOT NULL DEFAULT '00:00:30',
+    time INT NOT NULL DEFAULT 30,
     CONSTRAINT fk_game_id FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE
 );
 
@@ -41,22 +41,6 @@ CREATE TABLE answer (
     is_correct BOOLEAN NOT NULL,
     question_id INT NOT NULL,
     CONSTRAINT fk_question_id FOREIGN KEY(question_id) REFERENCES question(id) ON DELETE CASCADE
-);
-
-CREATE TABLE player (
-    id SERIAL PRIMARY KEY,
-    nickname VARCHAR(50) NOT NULL,
-    game_id int NOT NULL,
-    CONSTRAINT fk_game_id FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE
-);
-
-CREATE TABLE stats (
-    id SERIAL PRIMARY KEY,
-    player_id INT NOT NULL,
-    score INT NOT NULL,
-    question_id INT NOT NULL,
-    CONSTRAINT fk_player_id FOREIGN KEY (player_id) REFERENCES player(id) ON DELETE CASCADE,
-    CONSTRAINT fk_question_id FOREIGN KEY (question_id) REFERENCES question(id) ON DELETE CASCADE
 );
 
 CREATE OR REPLACE FUNCTION update_rating() 
